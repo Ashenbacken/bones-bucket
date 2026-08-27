@@ -6,6 +6,14 @@ describe('days', () => {
     expect(toDayKey(new Date(2026, 0, 1, 0, 0))).toBe('2026-01-01')
   })
 
+  it('rolls the day over at the configured hour', () => {
+    expect(toDayKey(new Date(2026, 7, 26, 1, 30), 4)).toBe('2026-08-25')
+    expect(toDayKey(new Date(2026, 7, 26, 3, 59), 4)).toBe('2026-08-25')
+    expect(toDayKey(new Date(2026, 7, 26, 4, 0), 4)).toBe('2026-08-26')
+    expect(toDayKey(new Date(2026, 7, 26, 23, 0), 4)).toBe('2026-08-26')
+    expect(toDayKey(new Date(2026, 0, 1, 2, 0), 4)).toBe('2025-12-31')
+  })
+
   it('round-trips through fromDayKey', () => {
     expect(toDayKey(fromDayKey('2026-02-28'))).toBe('2026-02-28')
   })

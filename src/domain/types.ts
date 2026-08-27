@@ -12,7 +12,7 @@ export interface Collector {
   removed?: boolean
 }
 
-export type Theme = 'crypt' | 'hades' | 'necro'
+export type Theme = 'crypt' | 'hades' | 'necro' | 'gilded'
 
 export interface Settings {
   sound: boolean
@@ -21,6 +21,8 @@ export interface Settings {
   spooky: boolean
   /** Visual theme: Crypt (slate & pewter), Hades (marble & bronze) or Necromancer (obsidian & ghoul-green). */
   theme: Theme
+  /** Hour (0–12) at which a new day starts; 0 = midnight, 4 = the night runs until 04:00. */
+  dayStartHour: number
 }
 
 /** Per collector, per day bone counts. Absent = 0. */

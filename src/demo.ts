@@ -24,8 +24,9 @@ export function seedDemo() {
       sound: true,
       haptics: true,
       spooky: true,
+      dayStartHour: 0,
       theme:
-        (['hades', 'necro'] as const).find(
+        (['hades', 'necro', 'gilded'] as const).find(
           (t) => t === new URLSearchParams(location.search).get('theme'),
         ) ?? 'crypt',
     },

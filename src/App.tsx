@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { replaceStoreAtom, settingsAtom, storeAtom, themeAtom, todayAtom } from '@/atoms/store'
-import { todayKey } from '@/domain/days'
+import {
+  mergeStoreAtom,
+  nowAtom,
+  replaceStoreAtom,
+  settingsAtom,
+  storeAtom,
+  themeAtom,
+} from '@/atoms/store'
 import { decodeHandoff, readHandoffFromHash } from '@/domain/handoff'
 import { StoreParseError } from '@/domain/store'
 import type { Store } from '@/domain/types'
@@ -13,20 +19,20 @@ import { ReportScreen } from '@/screens/ReportScreen'
 import { SettingsScreen } from '@/screens/SettingsScreen'
 
 function useMidnightRollover() {
-  const setToday = useSetAtom(todayAtom)
+  const setNow = useSetAtom(nowAtom)
   useEffect(() => {
-    const check = () => setToday(todayKey())
+    const check = () => setNow(Date.now())
     const id = setInterval(check, 30_000)
     document.addEventListener('visibilitychange', check)
     return () => {
       clearInterval(id)
       document.removeEventListener('visibilitychange', check)
     }
-  }, [setToday])
+  }, [setNow])
 }
 
-const THEME_COLOR = { crypt: '#070b12', hades: '#0b0b0e', necro: '#0f1012' }
-const THEME_PULSE = { crypt: '#2a0a0c', hades: '#2a1a08', necro: '#0c2a08' }
+const THEME_COLOR = { crypt: '#070b12', hades: '#0b0b0e', necro: '#0f1012', gilded: '#0d0a08' }
+const THEME_PULSE = { crypt: '#2a0a0c', hades: '#2a1a08', necro: '#0c2a08', gilded: '#3a2a0a' }
 
 /** Apply the theme to <html> and warm the browser chrome briefly whenever the bucket changes. */
 function useThemeColorPulse() {
@@ -122,6 +128,7 @@ export default function App() {
   })
   const settings = useAtomValue(settingsAtom)
   const replaceStore = useSetAtom(replaceStoreAtom)
+  const mergeStore = useSetAtom(mergeStoreAtom)
   const handoff = useHandoffFromUrl()
   const landscape = useLandscapePhone()
   useMidnightRollover()
@@ -160,6 +167,11 @@ export default function App() {
         onClose={handoff.clear}
         onReplace={() => {
           if (handoff.incoming) replaceStore(handoff.incoming)
+          handoff.clear()
+          setTab('bucket')
+        }}
+        onMerge={() => {
+          if (handoff.incoming) mergeStore(handoff.incoming)
           handoff.clear()
           setTab('bucket')
         }}

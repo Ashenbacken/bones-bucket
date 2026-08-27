@@ -4,7 +4,8 @@ import type { Collector, DayKey, Settings, Store } from '@/domain/types'
 import { newId, STORAGE_KEY, tryParseStore } from '@/domain/store'
 import { createSeededStore } from '@/domain/seed'
 import { addBone, removeBone } from '@/domain/bones'
-import { todayKey } from '@/domain/days'
+import { toDayKey } from '@/domain/days'
+import { mergeStores } from '@/domain/merge'
 
 const storage = createJSONStorage<Store>(() => localStorage)
 const validated = {
@@ -20,8 +21,13 @@ export const storeAtom = atomWithStorage<Store>(STORAGE_KEY, createSeededStore()
   getOnInit: true,
 })
 
-/** Re-evaluated on an interval so the app rolls over at local midnight while open. */
-export const todayAtom = atom<DayKey>(todayKey())
+/** Wall clock, ticked on an interval so the day rolls over while the app is open. */
+export const nowAtom = atom<number>(Date.now())
+
+/** Today's key, honouring the configured day boundary. */
+export const todayAtom = atom<DayKey>((get) =>
+  toDayKey(new Date(get(nowAtom)), get(storeAtom).settings.dayStartHour),
+)
 
 export const settingsAtom = atom(
   (get) => get(storeAtom).settings,
@@ -87,6 +93,12 @@ export const undoLastAtom = atom(null, (get, set) => {
 export const clearAllBonesAtom = atom(null, (get, set) => {
   const s = get(storeAtom)
   set(storeAtom, { ...s, bones: {} })
+  set(lastTapAtom, null)
+})
+
+/** Merge a handed-off bucket into this one (see domain/merge). Device settings are kept. */
+export const mergeStoreAtom = atom(null, (get, set, incoming: Store) => {
+  set(storeAtom, mergeStores(get(storeAtom), incoming))
   set(lastTapAtom, null)
 })
 

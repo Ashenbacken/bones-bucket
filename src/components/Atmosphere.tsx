@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { themeAtom } from '@/atoms/store'
 import { Chain, SkullOrnament } from './Ornaments'
+import frame24 from '@/assets/themes/gilded/frame-24.png'
 
 const MOTES = Array.from({ length: 14 }, (_, i) => ({
   left: `${4 + ((i * 29) % 92)}%`,
@@ -20,6 +23,7 @@ export function Atmosphere({ enabled }: { enabled: boolean }) {
     return () => document.removeEventListener('visibilitychange', onVis)
   }, [])
   const paused = !enabled || !visible
+  const theme = useAtomValue(themeAtom)
 
   return (
     <div
@@ -52,7 +56,7 @@ export function Atmosphere({ enabled }: { enabled: boolean }) {
           />
         </svg>
       )}
-      <Frame eyes={enabled} />
+      {theme === 'gilded' ? <GildedFrame /> : <Frame eyes={enabled} />}
       {enabled && <div className="ember-glow" />}
     </div>
   )
@@ -62,6 +66,23 @@ const rail =
   'linear-gradient(180deg, var(--t-metal-hi) 0, var(--t-metal-mid) 18%, var(--t-metal-lo) 45%, var(--t-metal-shade) 70%, var(--t-line) 100%)'
 const railV =
   'linear-gradient(90deg, var(--t-metal-hi) 0, var(--t-metal-mid) 18%, var(--t-metal-lo) 45%, var(--t-metal-shade) 70%, var(--t-line) 100%)'
+
+/** Pixel-art gold frame around the viewport, 9-sliced from the kit's 24px border set. */
+function GildedFrame() {
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        borderStyle: 'solid',
+        borderWidth:
+          'calc(var(--frame) + var(--sat)) calc(var(--frame) + var(--sar)) calc(var(--frame) + var(--sab)) calc(var(--frame) + var(--sal))',
+        borderImage: `url(${frame24}) 21 repeat`,
+        imageRendering: 'pixelated',
+        boxShadow: 'inset 0 0 24px 6px rgb(0 0 0 / .8)',
+      }}
+    />
+  )
+}
 
 function Frame({ eyes }: { eyes: boolean }) {
   const top = 'calc(var(--frame) + var(--sat))'

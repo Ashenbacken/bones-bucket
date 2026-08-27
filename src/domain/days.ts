@@ -2,12 +2,17 @@ import type { DayKey } from './types'
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-export function toDayKey(date: Date): DayKey {
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+/**
+ * Calendar day a moment belongs to. With `dayStartHour` > 0 the day rolls over at that hour
+ * instead of midnight, so a 01:30 bone still counts for the evening before.
+ */
+export function toDayKey(date: Date, dayStartHour = 0): DayKey {
+  const d = dayStartHour ? new Date(date.getTime() - dayStartHour * 3_600_000) : date
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
-export function todayKey(now: Date = new Date()): DayKey {
-  return toDayKey(now)
+export function todayKey(now: Date = new Date(), dayStartHour = 0): DayKey {
+  return toDayKey(now, dayStartHour)
 }
 
 export function fromDayKey(key: DayKey): Date {

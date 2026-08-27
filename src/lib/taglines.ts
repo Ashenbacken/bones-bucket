@@ -42,7 +42,7 @@ function hash(s: string): number {
 export function taglineFor(
   day: DayKey,
   king: string | null,
-  theme: 'crypt' | 'hades' | 'necro' = 'crypt',
+  theme: 'crypt' | 'hades' | 'necro' | 'gilded' = 'crypt',
 ): string {
   const extra = theme === 'hades' ? HADES_TAGLINES : theme === 'necro' ? NECRO_TAGLINES : []
   const all = [...TAGLINES, ...extra]

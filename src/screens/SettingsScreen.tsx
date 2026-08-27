@@ -20,6 +20,8 @@ import { Dialog } from '@/components/Dialog'
 import { HandoffDialog } from '@/components/HandoffDialog'
 import { ImportDialog } from '@/components/ImportDialog'
 import { Panel } from '@/components/Panel'
+import { themeAtom } from '@/atoms/store'
+import toggleImg from '@/assets/themes/gilded/toggle.png'
 import { CrestSigil } from '@/components/Ornaments'
 
 function Toggle({
@@ -33,34 +35,54 @@ function Toggle({
   checked: boolean
   onChange: (v: boolean) => void
 }) {
+  const theme = useAtomValue(themeAtom)
   return (
     <label className="flex min-h-12 items-center justify-between gap-3 py-1">
       <span>
         <span className="engraved block font-semibold">{label}</span>
         {hint && <span className="block text-xs text-ivory-3">{hint}</span>}
       </span>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        aria-label={label}
-        onClick={() => onChange(!checked)}
-        className="etched etched-quiet relative h-8 w-14 shrink-0 rounded-full"
-      >
-        <span
-          className={`absolute top-1 left-0 h-6 w-6 rounded-full transition-all ${
-            checked ? 'translate-x-[26px]' : 'translate-x-1'
-          }`}
+      {theme === 'gilded' ? (
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          aria-label={label}
+          onClick={() => onChange(!checked)}
+          className="h-[45px] w-[78px] shrink-0"
           style={{
-            background: checked
-              ? 'radial-gradient(circle at 40% 35%, var(--t-gauge-a), var(--t-gauge-b) 60%, var(--t-gauge-c))'
-              : 'radial-gradient(circle at 40% 35%, var(--t-metal-mid), var(--t-metal-lo) 70%)',
-            boxShadow: checked
-              ? '0 0 10px var(--t-glow), inset 0 0 0 1px var(--t-line)'
-              : 'inset 0 0 0 1px var(--t-line)',
+            backgroundImage: `url(${toggleImg})`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            imageRendering: 'pixelated',
+            transform: checked ? 'scaleX(-1)' : undefined,
+            filter: checked ? undefined : 'saturate(.4) brightness(.7)',
           }}
         />
-      </button>
+      ) : (
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          aria-label={label}
+          onClick={() => onChange(!checked)}
+          className="etched etched-quiet relative h-8 w-14 shrink-0 rounded-full"
+        >
+          <span
+            className={`absolute top-1 left-0 h-6 w-6 rounded-full transition-all ${
+              checked ? 'translate-x-[26px]' : 'translate-x-1'
+            }`}
+            style={{
+              background: checked
+                ? 'radial-gradient(circle at 40% 35%, var(--t-gauge-a), var(--t-gauge-b) 60%, var(--t-gauge-c))'
+                : 'radial-gradient(circle at 40% 35%, var(--t-metal-mid), var(--t-metal-lo) 70%)',
+              boxShadow: checked
+                ? '0 0 10px var(--t-glow), inset 0 0 0 1px var(--t-line)'
+                : 'inset 0 0 0 1px var(--t-line)',
+            }}
+          />
+        </button>
+      )}
     </label>
   )
 }
@@ -95,7 +117,7 @@ export function SettingsScreen() {
   const set = (patch: Partial<Settings>) => setSettings(patch)
 
   const exportJson = async () => {
-    const name = `bones-bucket-${todayKey()}.json`
+    const name = `bones-bucket-${todayKey(new Date(), settings.dayStartHour)}.json`
     if (!(await shareJsonFile(name, store))) downloadJson(name, store)
   }
 
@@ -148,12 +170,13 @@ export function SettingsScreen() {
       </Section>
 
       <Section title="Theme">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {(
             [
               ['crypt', 'Crypt', 'Slate & blood'],
               ['hades', 'Hades', 'Marble & flame'],
               ['necro', 'Necro', 'Obsidian & ghoul-fire'],
+              ['gilded', 'Gilded', 'Pixel gold & candle'],
             ] as const
           ).map(([id, label, hint]) => (
             <button
@@ -177,6 +200,42 @@ export function SettingsScreen() {
               </span>
             </button>
           ))}
+        </div>
+      </Section>
+
+      <Section title="Day boundary">
+        <p className="mb-2 text-sm text-ivory-2">
+          Bones given after midnight but before this hour still count for the evening before.
+        </p>
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            aria-label="Earlier"
+            disabled={settings.dayStartHour <= 0}
+            onClick={() => set({ dayStartHour: settings.dayStartHour - 1 })}
+            className="etched etched-quiet plaque-press h-12 w-12 text-xl text-ivory disabled:opacity-30"
+          >
+            <span className="relative z-10">‹</span>
+          </button>
+          <div className="text-center">
+            <div className="font-display glow-red text-2xl">
+              {String(settings.dayStartHour).padStart(2, '0')}:00
+            </div>
+            <div className="text-xs text-ivory-3">
+              {settings.dayStartHour === 0
+                ? 'a new day starts at midnight'
+                : 'a new day starts here'}
+            </div>
+          </div>
+          <button
+            type="button"
+            aria-label="Later"
+            disabled={settings.dayStartHour >= 12}
+            onClick={() => set({ dayStartHour: settings.dayStartHour + 1 })}
+            className="etched etched-quiet plaque-press h-12 w-12 text-xl text-ivory disabled:opacity-30"
+          >
+            <span className="relative z-10">›</span>
+          </button>
         </div>
       </Section>
 
@@ -241,6 +300,16 @@ export function SettingsScreen() {
 
       <p className="text-center text-xs text-ivory-3">
         Bones Bucket v{__APP_VERSION__} · data stays on this phone
+        <br />
+        Gilded pixel art by{' '}
+        <a
+          href="https://abyssowl.itch.io/gothic-pixel-ui"
+          target="_blank"
+          rel="noreferrer"
+          className="underline underline-offset-2"
+        >
+          AbyssOwl
+        </a>
       </p>
 
       {editing && (

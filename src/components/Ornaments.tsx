@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { useAtomValue } from 'jotai'
 import { themeAtom } from '@/atoms/store'
+import crow from '@/assets/themes/gilded/icon-crow.png'
 
 /** Shaded skull for the frame corners; wears a laurel wreath in Hades. */
 export function SkullOrnament({
@@ -194,6 +195,16 @@ export function Chain({
 /** Header crest: spiked gold crest with a bone (Crypt) or an olive wreath around a bone (Hades). */
 export function CrestSigil({ className }: { className?: string }) {
   const theme = useAtomValue(themeAtom)
+  if (theme === 'gilded') {
+    return (
+      <img
+        src={crow}
+        alt=""
+        className={className}
+        style={{ imageRendering: 'pixelated', objectFit: 'contain' }}
+      />
+    )
+  }
   if (theme === 'necro') {
     return (
       <svg viewBox="0 0 48 40" className={className} aria-hidden>

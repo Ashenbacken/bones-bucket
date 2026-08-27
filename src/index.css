@@ -160,6 +160,114 @@
 /* Motion is always on: this is a party app for a handful of friends. Spooky mode in Settings is
    the manual off switch for the ambient effects; the OS reduce-motion preference is ignored. */
 
+/* ---- Gilded theme: pixel-art gold frames (Gothic Pixel UI kit) on candle-lit black ---- */
+:root[data-theme='gilded'] {
+  --font-display: 'Jacquard 24', 'Grenze Gotisch', serif;
+  --frame: 21px;
+  --t-line: #1a1208;
+  --t-metal-lo: #3a2a0a;
+  --t-metal-mid: #8a6a24;
+  --t-metal-hi: #d9b45a;
+  --t-metal-hi-2: #b8943e;
+  --t-metal-shade: #5c4414;
+  --t-trim: #d9b45a;
+  --t-trim-lo: #6e4f18;
+  --t-trim-hi: #f1d98a;
+  --t-ground: #0d0a08;
+  --t-ground-tint: 90 60 20;
+  --t-panel: #17120c;
+  --t-etched-a: #1a1409;
+  --t-etched-b: #0a0805;
+  --t-glow-rgb: 170 120 30;
+  --t-glow: #f1d98a;
+  --t-glow-hi: #fff2c4;
+  --t-glow-core: #d9b45a;
+  --t-glow-lo: #6e4f18;
+  --t-gauge-a: #f1d98a;
+  --t-gauge-b: #b8943e;
+  --t-gauge-c: #3a2a0a;
+  --t-mist-a: 120 90 40;
+  --t-mist-b: 60 40 30;
+  --t-flame: 255 190 90;
+  --t-flame-2: 200 120 40;
+  --t-spark: #f1d98a;
+  --t-veins: none;
+  --t-spike: none;
+  --g-frame-24: url('./assets/themes/gilded/frame-24.png');
+  --g-frame-16: url('./assets/themes/gilded/frame-16.png');
+  --g-frame-16b: url('./assets/themes/gilded/frame-16b.png');
+  --g-bar: url('./assets/themes/gilded/bar.png');
+  --g-bar-fill: url('./assets/themes/gilded/bar-fill.png');
+}
+:root[data-theme='gilded'] .font-display {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+/* pixel type wants hard shadows, not blur */
+:root[data-theme='gilded'] .glow-red {
+  text-shadow:
+    2px 2px 0 #1a1208,
+    0 0 8px rgb(217 180 90 / 0.35);
+}
+:root[data-theme='gilded'] .glow-gold {
+  text-shadow: 2px 2px 0 #1a1208;
+}
+/* flat, dithered-looking ground: no cracks, a faint scanline */
+:root[data-theme='gilded'] .slate {
+  background-image:
+    radial-gradient(ellipse at 50% 30%, rgb(var(--t-ground-tint) / 0.22), transparent 65%),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgb(0 0 0 / 0.25) 3px 4px);
+  background-blend-mode: normal, normal;
+}
+/* panels: pixel frame via 9-slice, rings/spikes off */
+:root[data-theme='gilded'] .plaque {
+  margin: 0;
+  border-radius: 0;
+  border: 18px solid transparent;
+  border-image: var(--g-frame-16) 18 repeat;
+  image-rendering: pixelated;
+  background-image: none;
+  background-color: var(--t-panel);
+  background-clip: padding-box;
+  box-shadow: 0 6px 0 rgb(0 0 0 / 0.6);
+}
+:root[data-theme='gilded'] .plaque::before,
+:root[data-theme='gilded'] .plaque::after,
+:root[data-theme='gilded'] .spiked > .spike {
+  display: none;
+}
+/* buttons and inputs: the lighter 16px frame */
+:root[data-theme='gilded'] .etched {
+  border-radius: 0;
+  border: 14px solid transparent;
+  border-image: var(--g-frame-16b) 18 / 14px repeat;
+  image-rendering: pixelated;
+  background: var(--t-etched-b);
+  background-clip: padding-box;
+  box-shadow: 0 4px 0 rgb(0 0 0 / 0.6);
+}
+:root[data-theme='gilded'] .etched-quiet {
+  background: #0a0805;
+}
+/* gauges: ornate bar as the track, pixel fill strip */
+:root[data-theme='gilded'] .gauge {
+  height: 24px;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  border: 12px solid transparent;
+  border-image: var(--g-bar) 12 repeat;
+  image-rendering: pixelated;
+}
+:root[data-theme='gilded'] .gauge > i {
+  inset: -5px 0;
+  border-radius: 0;
+  background: var(--g-bar-fill) repeat-x;
+  background-size: 4px 100%;
+  box-shadow: none;
+  width: calc(100% * var(--p, 0));
+}
+
 html,
 body,
 #root {

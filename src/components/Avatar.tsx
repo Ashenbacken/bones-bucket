@@ -1,6 +1,7 @@
 import { useAtomValue } from 'jotai'
 import { themeAtom } from '@/atoms/store'
 import { getCharacter, type Crest, type Metal } from '@/characters/catalog'
+import oval from '@/assets/themes/gilded/oval.png'
 
 interface Props {
   characterId: string
@@ -163,6 +164,34 @@ export function Avatar({ characterId, initial, variant = 0, className, title }: 
   const shape = SHAPES[c.crest]
   const uid = `${c.id}-${c.crest}`
   const letter = (initial ?? '?').trim().charAt(0).toUpperCase() || '?'
+
+  if (theme === 'gilded') {
+    return (
+      <svg
+        viewBox="0 0 50 61"
+        className={className}
+        role="img"
+        aria-label={title ?? c.id}
+        style={variant ? { filter: `hue-rotate(${variant * 70}deg)` } : undefined}
+      >
+        <image href={oval} width="50" height="61" style={{ imageRendering: 'pixelated' }} />
+        <text
+          x="25"
+          y="36"
+          textAnchor="middle"
+          fontFamily="'Jacquard 24', 'Grenze Gotisch', serif"
+          fontSize="26"
+          fill="#f1d98a"
+          stroke="#1a1208"
+          strokeWidth="1.2"
+          paintOrder="stroke"
+        >
+          {letter}
+        </text>
+        <rect x="22" y="48" width="6" height="6" fill={c.gem} stroke="#1a1208" strokeWidth="1" />
+      </svg>
+    )
+  }
 
   if (theme === 'necro') {
     return (

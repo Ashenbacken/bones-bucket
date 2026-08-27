@@ -16,7 +16,21 @@ describe('parseStore', () => {
   it('fills defaults for missing optional fields', () => {
     const s = parseStore({ version: 1, collectors: [{ id: 'a', name: 'A' }] })
     expect(s.collectors[0].characterId).toBe('unknown')
-    expect(s.settings).toEqual({ sound: true, haptics: true, spooky: true, theme: 'crypt' })
+    expect(s.settings).toEqual({
+      sound: true,
+      haptics: true,
+      spooky: true,
+      theme: 'crypt',
+      dayStartHour: 0,
+    })
+    expect(
+      parseStore({ version: 1, collectors: [], settings: { dayStartHour: 4 } }).settings
+        .dayStartHour,
+    ).toBe(4)
+    expect(
+      parseStore({ version: 1, collectors: [], settings: { dayStartHour: 30 } }).settings
+        .dayStartHour,
+    ).toBe(0)
     expect(
       parseStore({ version: 1, collectors: [], settings: { theme: 'hades' } }).settings.theme,
     ).toBe('hades')
@@ -27,7 +41,7 @@ describe('parseStore', () => {
   })
 
   it('accepts every known theme', () => {
-    for (const theme of ['crypt', 'hades', 'necro'] as const) {
+    for (const theme of ['crypt', 'hades', 'necro', 'gilded'] as const) {
       expect(parseStore({ version: 1, collectors: [], settings: { theme } }).settings.theme).toBe(
         theme,
       )

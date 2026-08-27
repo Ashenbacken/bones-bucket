@@ -23,12 +23,17 @@ Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, tests, build
 
 ## Themes
 
-Three themes, switchable in Settings and stored per device (`settings.theme`):
+Four themes, switchable in Settings and stored per device (`settings.theme`):
 
 - **Crypt** (default) — cracked slate, pewter, gold chain, blood-red glow.
 - **Necro** — obsidian mausoleum tiles, cold stone frames, hexagonal stone ossuary instead
   of the bucket (relic bones with chips and fractures stack in a recessed chamber), iron skull
   badges with the initial burning across the face, blackletter type with a pulsing ghoul-green aura.
+- **Gilded** — pixel-art gold frames from the "Gothic Pixel UI FREE" kit (9-sliced border
+  images, ornate bars as gauges, oval medallions, kit toggle, crow sigil), Jacquard 24 pixel
+  blackletter, hard pixel shadows. Pixel art by [AbyssOwl](https://abyssowl.itch.io/gothic-pixel-ui)
+  (license in `src/assets/themes/gilded/LICENSE.md`); rebuild the slices from the raw kit with
+  `node scripts/kit-gilded.mjs`.
 - **Hades** — black marble with gold veins, weathered bronze, Greek meander trim, laurel-wreathed
   skulls, amber flame glow, extra Greek taglines. Made for the Athens trip.
 
@@ -49,6 +54,10 @@ bucket; anyone can still be added, renamed or removed in the app.
   by a short bone rattle, randomised per tap. No audio assets.
 - In a browser tab the app requests fullscreen on the first tap (installed PWAs are already
   standalone; iOS Safari has no document fullscreen).
+- Settings → Day boundary lets the "day" roll over at e.g. 04:00 instead of midnight (per device;
+  it re-buckets history too, since bones are keyed by day at the time they were given).
+- Importing a handed-off bucket offers Merge (higher count per person per day, new people added)
+  or Replace.
 - Hand-off links carry the compressed bucket in the URL fragment (`#h=…`); nothing is uploaded.
 - Characters (`src/characters/catalog.ts`) give each collector a crest medallion (shape, metal, gem,
   ornament — the initial is engraved at render time) and a title template ("Erik the Digger").

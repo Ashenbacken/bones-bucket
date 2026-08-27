@@ -8,6 +8,7 @@ export const defaultSettings: Settings = {
   haptics: true,
   spooky: true,
   theme: 'crypt',
+  dayStartHour: 0,
 }
 
 export function createEmptyStore(): Store {
@@ -66,7 +67,14 @@ export function parseStore(input: unknown): Store {
     sound: typeof s.sound === 'boolean' ? s.sound : defaultSettings.sound,
     haptics: typeof s.haptics === 'boolean' ? s.haptics : defaultSettings.haptics,
     spooky: typeof s.spooky === 'boolean' ? s.spooky : defaultSettings.spooky,
-    theme: s.theme === 'hades' || s.theme === 'necro' ? s.theme : 'crypt',
+    theme: s.theme === 'hades' || s.theme === 'necro' || s.theme === 'gilded' ? s.theme : 'crypt',
+    dayStartHour:
+      typeof s.dayStartHour === 'number' &&
+      Number.isInteger(s.dayStartHour) &&
+      s.dayStartHour >= 0 &&
+      s.dayStartHour <= 12
+        ? s.dayStartHour
+        : 0,
   }
 
   return { version: 1, collectors, bones, settings }

@@ -5,3 +5,7 @@ dev-dist
 .DS_Store
 coverage
 *.tsbuildinfo
+
+# raw UI kits: local only, see design/kits/README.md
+design/kits/*
+!design/kits/README.md
