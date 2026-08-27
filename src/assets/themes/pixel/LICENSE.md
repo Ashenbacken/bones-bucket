@@ -1,6 +1,6 @@
-# Gilded theme assets
+# Pixel theme assets (Gilded, Tarnished, Cobalt, Umber)
 
-The PNG files in this folder are slices (some recomposed) from **Gothic Pixel UI – Game Asset
+The PNG files in these folders are slices (some recomposed) from **Gothic Pixel UI – Game Asset
 Pack** by **AbyssOwl** — https://abyssowl.itch.io/gothic-pixel-ui — used under the pack's license:
 
 - Allowed in commercial and non-commercial projects; assets may be edited and modified.

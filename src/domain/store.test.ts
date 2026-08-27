@@ -1,4 +1,5 @@
 import { parseStore, createEmptyStore, StoreParseError, summarize, tryParseStore } from './store'
+import { THEMES } from './types'
 
 describe('parseStore', () => {
   it('accepts an empty store', () => {
@@ -41,7 +42,7 @@ describe('parseStore', () => {
   })
 
   it('accepts every known theme', () => {
-    for (const theme of ['crypt', 'hades', 'necro', 'gilded'] as const) {
+    for (const theme of THEMES) {
       expect(parseStore({ version: 1, collectors: [], settings: { theme } }).settings.theme).toBe(
         theme,
       )

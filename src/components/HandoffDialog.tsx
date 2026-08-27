@@ -52,7 +52,7 @@ export function HandoffDialog({ onClose }: { onClose: () => void }) {
       <p className="text-center text-sm text-ivory-2">
         {s.collectors} collectors · {s.bones} bones
       </p>
-      <div className="etched etched-quiet mx-auto mt-3 aspect-square w-full max-w-[280px] overflow-hidden p-3">
+      <div className="etched etched-quiet mx-auto mt-3 aspect-square w-full max-w-70 overflow-hidden p-3">
         {qr ? (
           <img src={qr} alt="QR code with the hand-off link" className="h-full w-full rounded-sm" />
         ) : (

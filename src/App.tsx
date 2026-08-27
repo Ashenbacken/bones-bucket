@@ -10,7 +10,7 @@ import {
 } from '@/atoms/store'
 import { decodeHandoff, readHandoffFromHash } from '@/domain/handoff'
 import { StoreParseError } from '@/domain/store'
-import type { Store } from '@/domain/types'
+import { isPixelTheme, type Store, type Theme } from '@/domain/types'
 import { Atmosphere } from '@/components/Atmosphere'
 import { ImportDialog } from '@/components/ImportDialog'
 import { TabBar, type Tab } from '@/components/TabBar'
@@ -31,8 +31,24 @@ function useMidnightRollover() {
   }, [setNow])
 }
 
-const THEME_COLOR = { crypt: '#070b12', hades: '#0b0b0e', necro: '#0f1012', gilded: '#0d0a08' }
-const THEME_PULSE = { crypt: '#2a0a0c', hades: '#2a1a08', necro: '#0c2a08', gilded: '#3a2a0a' }
+const THEME_COLOR: Record<Theme, string> = {
+  crypt: '#070b12',
+  hades: '#0b0b0e',
+  necro: '#0f1012',
+  gilded: '#0d0a08',
+  tarnished: '#070705',
+  cobalt: '#05060d',
+  umber: '#050302',
+}
+const THEME_PULSE: Record<Theme, string> = {
+  crypt: '#2a0a0c',
+  hades: '#2a1a08',
+  necro: '#0c2a08',
+  gilded: '#3a2a0a',
+  tarnished: '#272116',
+  cobalt: '#1c213d',
+  umber: '#2d1f18',
+}
 
 /** Apply the theme to <html> and warm the browser chrome briefly whenever the bucket changes. */
 function useThemeColorPulse() {
@@ -40,6 +56,9 @@ function useThemeColorPulse() {
   const theme = useAtomValue(themeAtom)
   useEffect(() => {
     document.documentElement.dataset.theme = theme
+    // the pixel palettes share one set of component rules, keyed on data-kit
+    if (isPixelTheme(theme)) document.documentElement.dataset.kit = 'pixel'
+    else delete document.documentElement.dataset.kit
   }, [theme])
   useEffect(() => {
     const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')

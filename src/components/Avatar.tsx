@@ -1,7 +1,14 @@
 import { useAtomValue } from 'jotai'
 import { themeAtom } from '@/atoms/store'
 import { getCharacter, type Crest, type Metal } from '@/characters/catalog'
-import oval from '@/assets/themes/gilded/oval.png'
+import { pixelAssets } from '@/assets/themes/pixel'
+import {
+  ATLAS_COLS,
+  ATLAS_ROWS,
+  characterIcon,
+  ICON_SIZE,
+  iconCell,
+} from '@/assets/themes/pixel/icons'
 
 interface Props {
   characterId: string
@@ -165,30 +172,50 @@ export function Avatar({ characterId, initial, variant = 0, className, title }: 
   const uid = `${c.id}-${c.crest}`
   const letter = (initial ?? '?').trim().charAt(0).toUpperCase() || '?'
 
-  if (theme === 'gilded') {
+  const pixel = pixelAssets(theme)
+  if (pixel) {
+    const cell = iconCell(characterIcon(c.id))
     return (
       <svg
-        viewBox="0 0 50 61"
+        viewBox="0 0 50 63"
         className={className}
         role="img"
         aria-label={title ?? c.id}
         style={variant ? { filter: `hue-rotate(${variant * 70}deg)` } : undefined}
       >
-        <image href={oval} width="50" height="61" style={{ imageRendering: 'pixelated' }} />
-        <text
-          x="25"
-          y="36"
-          textAnchor="middle"
-          fontFamily="'Jacquard 24', 'Grenze Gotisch', serif"
-          fontSize="26"
-          fill="#f1d98a"
-          stroke="#1a1208"
-          strokeWidth="1.2"
-          paintOrder="stroke"
+        <image href={pixel.oval} width="50" height="63" style={{ imageRendering: 'pixelated' }} />
+        {/* a lit plate behind the icon: the kit's darker palettes are silhouettes otherwise */}
+        <ellipse
+          cx="25"
+          cy="27"
+          rx="13"
+          ry="15"
+          style={{ fill: 'var(--t-glow)', opacity: 'var(--g-plate)' }}
+        />
+        {/* the character's kit icon, cropped out of the atlas by a nested viewBox */}
+        <svg
+          x="13"
+          y="15"
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          viewBox={`${cell.x} ${cell.y} ${ICON_SIZE} ${ICON_SIZE}`}
         >
-          {letter}
-        </text>
-        <rect x="22" y="48" width="6" height="6" fill={c.gem} stroke="#1a1208" strokeWidth="1" />
+          <image
+            href={pixel.icons}
+            width={ATLAS_COLS * ICON_SIZE}
+            height={ATLAS_ROWS * ICON_SIZE}
+            style={{ imageRendering: 'pixelated' }}
+          />
+        </svg>
+        <rect
+          x="22"
+          y="49"
+          width="6"
+          height="6"
+          fill={c.gem}
+          strokeWidth="1"
+          style={{ stroke: 'var(--t-line)' }}
+        />
       </svg>
     )
   }

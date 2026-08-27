@@ -23,21 +23,23 @@ Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, tests, build
 
 ## Themes
 
-Four themes, switchable in Settings and stored per device (`settings.theme`):
+Seven themes, switchable in Settings and stored per device (`settings.theme`):
 
 - **Crypt** (default) — cracked slate, pewter, gold chain, blood-red glow.
 - **Necro** — obsidian mausoleum tiles, cold stone frames, hexagonal stone ossuary instead
   of the bucket (relic bones with chips and fractures stack in a recessed chamber), iron skull
   badges with the initial burning across the face, blackletter type with a pulsing ghoul-green aura.
-- **Gilded** — pixel-art gold frames from the "Gothic Pixel UI FREE" kit (9-sliced border
-  images, ornate bars as gauges, oval medallions, kit toggle, crow sigil), Jacquard 24 pixel
+- **Gilded**, **Tarnished**, **Cobalt**, **Umber** — pixel-art frames from the "Gothic Pixel UI"
+  kit, one theme per palette row of its sprite sheet (gold, olive, blue, brown): 9-sliced corner
+  and edge tiles, ornate bars as gauges, oval medallions, kit toggle, bone sigil, Jacquard 24 pixel
   blackletter, hard pixel shadows. Pixel art by [AbyssOwl](https://abyssowl.itch.io/gothic-pixel-ui)
-  (license in `src/assets/themes/gilded/LICENSE.md`); rebuild the slices from the raw kit with
-  `node scripts/kit-gilded.mjs`.
+  (license in `src/assets/themes/pixel/LICENSE.md`); rebuild the slices for all four palettes from
+  the raw kit's sprite sheets with `node scripts/kit-pixel.mjs`.
 - **Hades** — black marble with gold veins, weathered bronze, Greek meander trim, laurel-wreathed
   skulls, amber flame glow, extra Greek taglines. Made for the Athens trip.
 
-Themes are CSS variables (`--t-*` in `src/index.css`) overridden on `html[data-theme]`; SVG
+Themes are CSS variables (`--t-*` in `src/index.css`) overridden on `html[data-theme]` (the pixel
+themes also share component rules keyed on `html[data-kit='pixel']`); SVG
 ornaments read the same variables or switch on `themeAtom`. Adding a theme = one variable block
 plus optional ornament variants in `src/components/Ornaments.tsx`.
 
@@ -50,8 +52,9 @@ bucket; anyone can still be added, renamed or removed in the app.
 
 - State is one JSON document in `localStorage` (`src/domain/store.ts`), validated on every read.
 - Bones are stored as per-collector, per-day counts. A "day" is the phone's local calendar day.
-- The tap sound is synthesised with Web Audio (`src/lib/sound.ts`): an iron-bucket clang followed
-  by a short bone rattle, randomised per tap. No audio assets.
+- The tap sound is synthesised with Web Audio (`src/lib/sound.ts`): a hollow oak-bucket thud (or a
+  dry stone crack in Necro's sarcophagus) followed by a short bone rattle, randomised per tap. No
+  audio assets.
 - In a browser tab the app requests fullscreen on the first tap (installed PWAs are already
   standalone; iOS Safari has no document fullscreen).
 - Settings → Day boundary lets the "day" roll over at e.g. 04:00 instead of midnight (per device;
@@ -60,7 +63,9 @@ bucket; anyone can still be added, renamed or removed in the app.
   or Replace.
 - Hand-off links carry the compressed bucket in the URL fragment (`#h=…`); nothing is uploaded.
 - Characters (`src/characters/catalog.ts`) give each collector a crest medallion (shape, metal, gem,
-  ornament — the initial is engraved at render time) and a title template ("Erik the Digger").
+  ornament — the initial is engraved at render time) and a title template ("Erik the Digger"). In
+  the pixel themes the medallion shows the character's kit icon instead
+  (`src/assets/themes/pixel/icons.ts`).
 - Visual language: dark-fantasy UI kit — cracked slate ground, grey stone panels with pewter rims
   and spiked corners, gold chain trim, skull corner ornaments, red-glow Cinzel lettering. All
   textures are inline SVG/CSS; there are no image assets besides the icons.

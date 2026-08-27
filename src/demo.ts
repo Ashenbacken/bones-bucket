@@ -1,6 +1,6 @@
 import { STORAGE_KEY } from '@/domain/store'
 import { shiftDay, todayKey } from '@/domain/days'
-import type { Store } from '@/domain/types'
+import { THEMES, type Store } from '@/domain/types'
 import { createSeededStore } from '@/domain/seed'
 
 /** Seeds a sample bucket when built with VITE_DEMO=1 and the phone has no data yet. */
@@ -25,10 +25,7 @@ export function seedDemo() {
       haptics: true,
       spooky: true,
       dayStartHour: 0,
-      theme:
-        (['hades', 'necro', 'gilded'] as const).find(
-          (t) => t === new URLSearchParams(location.search).get('theme'),
-        ) ?? 'crypt',
+      theme: THEMES.find((t) => t === new URLSearchParams(location.search).get('theme')) ?? 'crypt',
     },
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(store))

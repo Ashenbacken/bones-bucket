@@ -55,7 +55,7 @@ export function CollectorForm({ open, onClose, collector, onSave, onRemove }: Pr
           maxLength={24}
           placeholder="First name"
           enterKeyHint="done"
-          className="etched etched-quiet engraved mt-1 w-full px-3 py-3 text-lg font-semibold outline-none placeholder:text-ivory-3"
+          className="etched etched-quiet engraved mt-1 w-full px-3 py-3 text-lg font-semibold outline-hidden placeholder:text-ivory-3"
         />
       </label>
 

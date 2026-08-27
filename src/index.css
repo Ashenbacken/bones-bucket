@@ -160,10 +160,11 @@
 /* Motion is always on: this is a party app for a handful of friends. Spooky mode in Settings is
    the manual off switch for the ambient effects; the OS reduce-motion preference is ignored. */
 
-/* ---- Gilded theme: pixel-art gold frames (Gothic Pixel UI kit) on candle-lit black ---- */
+/* ---- Pixel themes: Gothic Pixel UI kit frames, one theme per palette row of the sheet.
+   Gilded: gold on candle-lit black ---- */
 :root[data-theme='gilded'] {
   --font-display: 'Jacquard 24', 'Grenze Gotisch', serif;
-  --frame: 21px;
+  --frame: 28px;
   --t-line: #1a1208;
   --t-metal-lo: #3a2a0a;
   --t-metal-mid: #8a6a24;
@@ -193,64 +194,187 @@
   --t-spark: #f1d98a;
   --t-veins: none;
   --t-spike: none;
-  --g-frame-24: url('./assets/themes/gilded/frame-24.png');
-  --g-frame-16: url('./assets/themes/gilded/frame-16.png');
-  --g-frame-16b: url('./assets/themes/gilded/frame-16b.png');
-  --g-bar: url('./assets/themes/gilded/bar.png');
-  --g-bar-fill: url('./assets/themes/gilded/bar-fill.png');
+  --g-plate: 0.16; /* backing behind avatar icons */
+  --g-frame-24: url('./assets/themes/pixel/gilded/frame-24.png');
+  --g-frame-16: url('./assets/themes/pixel/gilded/frame-16.png');
+  --g-frame-16b: url('./assets/themes/pixel/gilded/frame-16b.png');
+  --g-bar: url('./assets/themes/pixel/gilded/bar.png');
+  --g-bar-fill: url('./assets/themes/pixel/gilded/bar-fill.png');
 }
-:root[data-theme='gilded'] .font-display {
+/* ---- Tarnished: olive-gold on ash ---- */
+:root[data-theme='tarnished'] {
+  --font-display: 'Jacquard 24', 'Grenze Gotisch', serif;
+  --frame: 28px;
+  --t-line: #000000;
+  --t-metal-lo: #272116;
+  --t-metal-mid: #534b26;
+  --t-metal-hi: #7f7c4d;
+  --t-metal-hi-2: #625f36;
+  --t-metal-shade: #362d1f;
+  --t-trim: #7f7c4d;
+  --t-trim-lo: #362d1f;
+  --t-trim-hi: #b3b07a;
+  --t-ground: #070705;
+  --t-ground-tint: 60 60 30;
+  --t-panel: #100f0a;
+  --t-etched-a: #14130c;
+  --t-etched-b: #070705;
+  --t-glow-rgb: 120 118 70;
+  --t-glow: #c2bf86;
+  --t-glow-hi: #e6e3b4;
+  --t-glow-core: #7f7c4d;
+  --t-glow-lo: #362d1f;
+  --t-gauge-a: #c2bf86;
+  --t-gauge-b: #625f36;
+  --t-gauge-c: #272116;
+  --t-mist-a: 90 90 50;
+  --t-mist-b: 50 50 30;
+  --t-flame: 210 205 130;
+  --t-flame-2: 130 125 60;
+  --t-spark: #e6e3b4;
+  --t-veins: none;
+  --t-spike: none;
+  --g-plate: 0.3; /* backing behind avatar icons */
+  --g-frame-24: url('./assets/themes/pixel/tarnished/frame-24.png');
+  --g-frame-16: url('./assets/themes/pixel/tarnished/frame-16.png');
+  --g-frame-16b: url('./assets/themes/pixel/tarnished/frame-16b.png');
+  --g-bar: url('./assets/themes/pixel/tarnished/bar.png');
+  --g-bar-fill: url('./assets/themes/pixel/tarnished/bar-fill.png');
+}
+/* ---- Cobalt: steel blue on midnight ---- */
+:root[data-theme='cobalt'] {
+  --font-display: 'Jacquard 24', 'Grenze Gotisch', serif;
+  --frame: 28px;
+  --t-line: #060918;
+  --t-metal-lo: #1c213d;
+  --t-metal-mid: #424562;
+  --t-metal-hi: #696c8c;
+  --t-metal-hi-2: #50526e;
+  --t-metal-shade: #2c2f4f;
+  --t-trim: #696c8c;
+  --t-trim-lo: #2c2f4f;
+  --t-trim-hi: #a5a8c8;
+  --t-ground: #05060d;
+  --t-ground-tint: 30 40 90;
+  --t-panel: #0b0d19;
+  --t-etched-a: #0e1020;
+  --t-etched-b: #05060d;
+  --t-glow-rgb: 90 100 180;
+  --t-glow: #b8bce0;
+  --t-glow-hi: #e6e8ff;
+  --t-glow-core: #696c8c;
+  --t-glow-lo: #2c2f4f;
+  --t-gauge-a: #b8bce0;
+  --t-gauge-b: #50526e;
+  --t-gauge-c: #1c213d;
+  --t-mist-a: 80 90 160;
+  --t-mist-b: 40 40 80;
+  --t-flame: 160 175 255;
+  --t-flame-2: 90 100 200;
+  --t-spark: #e6e8ff;
+  --t-veins: none;
+  --t-spike: none;
+  --g-plate: 0.3; /* backing behind avatar icons */
+  --g-frame-24: url('./assets/themes/pixel/cobalt/frame-24.png');
+  --g-frame-16: url('./assets/themes/pixel/cobalt/frame-16.png');
+  --g-frame-16b: url('./assets/themes/pixel/cobalt/frame-16b.png');
+  --g-bar: url('./assets/themes/pixel/cobalt/bar.png');
+  --g-bar-fill: url('./assets/themes/pixel/cobalt/bar-fill.png');
+}
+/* ---- Umber: burnt brown on soot ---- */
+:root[data-theme='umber'] {
+  --font-display: 'Jacquard 24', 'Grenze Gotisch', serif;
+  --frame: 28px;
+  --t-line: #040303;
+  --t-metal-lo: #1b130f;
+  --t-metal-mid: #2d1f18;
+  --t-metal-hi: #624030;
+  --t-metal-hi-2: #4c3429;
+  --t-metal-shade: #1b130f;
+  --t-trim: #624030;
+  --t-trim-lo: #1b130f;
+  --t-trim-hi: #9a6a50;
+  --t-ground: #050302;
+  --t-ground-tint: 70 30 15;
+  --t-panel: #0c0806;
+  --t-etched-a: #100907;
+  --t-etched-b: #050302;
+  --t-glow-rgb: 160 80 40;
+  --t-glow: #d08a62;
+  --t-glow-hi: #f4c29c;
+  --t-glow-core: #624030;
+  --t-glow-lo: #1b130f;
+  --t-gauge-a: #d08a62;
+  --t-gauge-b: #4c3429;
+  --t-gauge-c: #1b130f;
+  --t-mist-a: 110 60 30;
+  --t-mist-b: 50 25 15;
+  --t-flame: 255 140 60;
+  --t-flame-2: 190 80 30;
+  --t-spark: #f4c29c;
+  --t-veins: none;
+  --t-spike: none;
+  --g-plate: 0.4; /* backing behind avatar icons */
+  --g-frame-24: url('./assets/themes/pixel/umber/frame-24.png');
+  --g-frame-16: url('./assets/themes/pixel/umber/frame-16.png');
+  --g-frame-16b: url('./assets/themes/pixel/umber/frame-16b.png');
+  --g-bar: url('./assets/themes/pixel/umber/bar.png');
+  --g-bar-fill: url('./assets/themes/pixel/umber/bar-fill.png');
+}
+:root[data-kit='pixel'] .font-display {
   text-transform: none;
   letter-spacing: 0.02em;
 }
 /* pixel type wants hard shadows, not blur */
-:root[data-theme='gilded'] .glow-red {
+:root[data-kit='pixel'] .glow-red {
   text-shadow:
-    2px 2px 0 #1a1208,
-    0 0 8px rgb(217 180 90 / 0.35);
+    2px 2px 0 var(--t-line),
+    0 0 8px rgb(var(--t-glow-rgb) / 0.45);
 }
-:root[data-theme='gilded'] .glow-gold {
-  text-shadow: 2px 2px 0 #1a1208;
+:root[data-kit='pixel'] .glow-gold {
+  text-shadow: 2px 2px 0 var(--t-line);
 }
 /* flat, dithered-looking ground: no cracks, a faint scanline */
-:root[data-theme='gilded'] .slate {
+:root[data-kit='pixel'] .slate {
   background-image:
     radial-gradient(ellipse at 50% 30%, rgb(var(--t-ground-tint) / 0.22), transparent 65%),
     repeating-linear-gradient(0deg, transparent 0 3px, rgb(0 0 0 / 0.25) 3px 4px);
   background-blend-mode: normal, normal;
 }
 /* panels: pixel frame via 9-slice, rings/spikes off */
-:root[data-theme='gilded'] .plaque {
+:root[data-kit='pixel'] .plaque {
   margin: 0;
   border-radius: 0;
-  border: 18px solid transparent;
-  border-image: var(--g-frame-16) 18 repeat;
+  border: 17px solid transparent;
+  border-image: var(--g-frame-16) 17 repeat;
   image-rendering: pixelated;
   background-image: none;
   background-color: var(--t-panel);
-  background-clip: padding-box;
+  /* the frame's bar sits on the outer edge of the slice; paint under the whole border so the
+     inner band is not see-through */
+  background-clip: border-box;
   box-shadow: 0 6px 0 rgb(0 0 0 / 0.6);
 }
-:root[data-theme='gilded'] .plaque::before,
-:root[data-theme='gilded'] .plaque::after,
-:root[data-theme='gilded'] .spiked > .spike {
+:root[data-kit='pixel'] .plaque::before,
+:root[data-kit='pixel'] .plaque::after,
+:root[data-kit='pixel'] .spiked > .spike {
   display: none;
 }
-/* buttons and inputs: the lighter 16px frame */
-:root[data-theme='gilded'] .etched {
+/* buttons and inputs: the plain double-line 16px frame */
+:root[data-kit='pixel'] .etched {
   border-radius: 0;
-  border: 14px solid transparent;
-  border-image: var(--g-frame-16b) 18 / 14px repeat;
+  border: 15px solid transparent;
+  border-image: var(--g-frame-16b) 15 repeat;
   image-rendering: pixelated;
   background: var(--t-etched-b);
-  background-clip: padding-box;
+  background-clip: border-box;
   box-shadow: 0 4px 0 rgb(0 0 0 / 0.6);
 }
-:root[data-theme='gilded'] .etched-quiet {
-  background: #0a0805;
+:root[data-kit='pixel'] .etched-quiet {
+  background: var(--t-etched-b);
 }
 /* gauges: ornate bar as the track, pixel fill strip */
-:root[data-theme='gilded'] .gauge {
+:root[data-kit='pixel'] .gauge {
   height: 24px;
   border-radius: 0;
   background: none;
@@ -259,7 +383,7 @@
   border-image: var(--g-bar) 12 repeat;
   image-rendering: pixelated;
 }
-:root[data-theme='gilded'] .gauge > i {
+:root[data-kit='pixel'] .gauge > i {
   inset: -5px 0;
   border-radius: 0;
   background: var(--g-bar-fill) repeat-x;

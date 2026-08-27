@@ -8,7 +8,7 @@ import {
   storeAtom,
   updateCollectorAtom,
 } from '@/atoms/store'
-import type { Collector, Settings, Store } from '@/domain/types'
+import { PIXEL_THEMES, type Collector, type Settings, type Store, type Theme } from '@/domain/types'
 import { parseStore, StoreParseError } from '@/domain/store'
 import { todayKey } from '@/domain/days'
 import { displayName } from '@/characters/catalog'
@@ -21,8 +21,25 @@ import { HandoffDialog } from '@/components/HandoffDialog'
 import { ImportDialog } from '@/components/ImportDialog'
 import { Panel } from '@/components/Panel'
 import { themeAtom } from '@/atoms/store'
-import toggleImg from '@/assets/themes/gilded/toggle.png'
+import { pixelAssets } from '@/assets/themes/pixel'
 import { CrestSigil } from '@/components/Ornaments'
+
+const THEME_LABELS: Record<Theme, [label: string, hint: string]> = {
+  crypt: ['Crypt', 'Slate & blood'],
+  hades: ['Hades', 'Marble & flame'],
+  necro: ['Necro', 'Obsidian & ghoul-fire'],
+  gilded: ['Gilded', 'Pixel gold & candle'],
+  tarnished: ['Tarnished', 'Pixel olive & ash'],
+  cobalt: ['Cobalt', 'Pixel blue & moonlight'],
+  umber: ['Umber', 'Pixel brown & ember'],
+}
+/** One card per look; the pixel kit's four palettes share a card that cycles through them. */
+const THEME_CARDS: Array<{ ids: readonly Theme[] }> = [
+  { ids: ['crypt'] },
+  { ids: ['hades'] },
+  { ids: ['necro'] },
+  { ids: PIXEL_THEMES },
+]
 
 function Toggle({
   label,
@@ -35,23 +52,23 @@ function Toggle({
   checked: boolean
   onChange: (v: boolean) => void
 }) {
-  const theme = useAtomValue(themeAtom)
+  const pixel = pixelAssets(useAtomValue(themeAtom))
   return (
     <label className="flex min-h-12 items-center justify-between gap-3 py-1">
       <span>
         <span className="engraved block font-semibold">{label}</span>
         {hint && <span className="block text-xs text-ivory-3">{hint}</span>}
       </span>
-      {theme === 'gilded' ? (
+      {pixel ? (
         <button
           type="button"
           role="switch"
           aria-checked={checked}
           aria-label={label}
           onClick={() => onChange(!checked)}
-          className="h-[45px] w-[78px] shrink-0"
+          className="h-11.25 w-19.5 shrink-0"
           style={{
-            backgroundImage: `url(${toggleImg})`,
+            backgroundImage: `url(${pixel.toggle})`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             imageRendering: 'pixelated',
@@ -70,7 +87,7 @@ function Toggle({
         >
           <span
             className={`absolute top-1 left-0 h-6 w-6 rounded-full transition-all ${
-              checked ? 'translate-x-[26px]' : 'translate-x-1'
+              checked ? 'translate-x-6.5' : 'translate-x-1'
             }`}
             style={{
               background: checked
@@ -171,35 +188,43 @@ export function SettingsScreen() {
 
       <Section title="Theme">
         <div className="grid grid-cols-2 gap-2">
-          {(
-            [
-              ['crypt', 'Crypt', 'Slate & blood'],
-              ['hades', 'Hades', 'Marble & flame'],
-              ['necro', 'Necro', 'Obsidian & ghoul-fire'],
-              ['gilded', 'Gilded', 'Pixel gold & candle'],
-            ] as const
-          ).map(([id, label, hint]) => (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={settings.theme === id}
-              onClick={() => set({ theme: id })}
-              className={`etched plaque-press flex min-h-16 flex-col items-center justify-center p-2 ${
-                settings.theme === id ? '' : 'etched-quiet'
-              }`}
-            >
-              <span
-                className={`font-display relative z-10 text-xs font-bold tracking-widest uppercase ${
-                  settings.theme === id ? 'glow-red' : 'text-ivory-2'
+          {THEME_CARDS.map((card) => {
+            const active = card.ids.includes(settings.theme)
+            // the pixel card shows the current palette and cycles to the next one when tapped again
+            const current = active ? settings.theme : card.ids[0]
+            const next = active
+              ? card.ids[(card.ids.indexOf(current) + 1) % card.ids.length]
+              : current
+            const [label, hint] = THEME_LABELS[current]
+            return (
+              <button
+                key={card.ids[0]}
+                type="button"
+                aria-pressed={active}
+                aria-label={
+                  card.ids.length > 1 && active
+                    ? `${label}, tap for ${THEME_LABELS[next][0]}`
+                    : label
+                }
+                onClick={() => set({ theme: next })}
+                className={`etched plaque-press flex min-h-16 flex-col items-center justify-center p-2 ${
+                  active ? '' : 'etched-quiet'
                 }`}
               >
-                {label}
-              </span>
-              <span className="relative z-10 text-center text-[10px] leading-tight text-ivory-3">
-                {hint}
-              </span>
-            </button>
-          ))}
+                <span
+                  className={`font-display relative z-10 text-xs font-bold tracking-widest uppercase ${
+                    active ? 'glow-red' : 'text-ivory-2'
+                  }`}
+                >
+                  {label}
+                </span>
+                <span className="relative z-10 text-center text-[10px] leading-tight text-ivory-3">
+                  {hint}
+                  {card.ids.length > 1 && active ? ' ↻' : ''}
+                </span>
+              </button>
+            )
+          })}
         </div>
       </Section>
 

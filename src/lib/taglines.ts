@@ -1,4 +1,4 @@
-import type { DayKey } from '@/domain/types'
+import type { DayKey, Theme } from '@/domain/types'
 
 /** `{king}` is replaced with the day's shame leader; lines without it work for any day. */
 export const TAGLINES = [
@@ -39,11 +39,7 @@ function hash(s: string): number {
 }
 
 /** Deterministic per day so everyone looking at the phone sees the same line. */
-export function taglineFor(
-  day: DayKey,
-  king: string | null,
-  theme: 'crypt' | 'hades' | 'necro' | 'gilded' = 'crypt',
-): string {
+export function taglineFor(day: DayKey, king: string | null, theme: Theme = 'crypt'): string {
   const extra = theme === 'hades' ? HADES_TAGLINES : theme === 'necro' ? NECRO_TAGLINES : []
   const all = [...TAGLINES, ...extra]
   const pool = king ? all : all.filter((t) => !t.includes('{king}'))

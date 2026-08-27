@@ -1,4 +1,4 @@
-import type { Collector, Settings, Store } from './types'
+import { THEMES, type Collector, type Settings, type Store, type Theme } from './types'
 import { isValidDayKey } from './days'
 
 export const STORAGE_KEY = 'bones-bucket:v1'
@@ -67,7 +67,7 @@ export function parseStore(input: unknown): Store {
     sound: typeof s.sound === 'boolean' ? s.sound : defaultSettings.sound,
     haptics: typeof s.haptics === 'boolean' ? s.haptics : defaultSettings.haptics,
     spooky: typeof s.spooky === 'boolean' ? s.spooky : defaultSettings.spooky,
-    theme: s.theme === 'hades' || s.theme === 'necro' || s.theme === 'gilded' ? s.theme : 'crypt',
+    theme: (THEMES as readonly unknown[]).includes(s.theme) ? (s.theme as Theme) : 'crypt',
     dayStartHour:
       typeof s.dayStartHour === 'number' &&
       Number.isInteger(s.dayStartHour) &&
