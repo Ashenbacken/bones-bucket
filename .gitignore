@@ -9,3 +9,6 @@ coverage
 # raw UI kits: local only, see design/kits/README.md
 design/kits/*
 !design/kits/README.md
+
+# theme screenshots from scripts/shots.mjs
+design/shots
