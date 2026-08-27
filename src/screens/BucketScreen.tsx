@@ -13,7 +13,7 @@ import {
 import { countFor, rankDay } from '@/domain/bones'
 import { displayName } from '@/characters/catalog'
 import { buzz } from '@/lib/haptics'
-import { clunk } from '@/lib/sound'
+import { bucketMaterial, clunk } from '@/lib/sound'
 import { Avatar } from '@/components/Avatar'
 import { BucketGraphic } from '@/components/BucketGraphic'
 import { Crown } from '@/components/Crown'
@@ -50,7 +50,7 @@ export function BucketScreen() {
   const tap = (id: string) => {
     giveBone(id)
     if (settings.haptics) buzz()
-    if (settings.sound) clunk()
+    if (settings.sound) clunk(bucketMaterial(settings.theme))
   }
   const expire = useCallback(() => setLastTap(null), [setLastTap])
   const lastCollector = lastTap && store.collectors.find((c) => c.id === lastTap.collectorId)
