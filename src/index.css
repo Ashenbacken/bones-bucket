@@ -138,23 +138,27 @@
   letter-spacing: 0.01em;
 }
 :root[data-theme='necro'] .glow-red {
+  text-shadow:
+    0 0 2px var(--t-glow-hi),
+    0 0 6px var(--t-glow-core),
+    0 0 12px var(--t-glow-lo),
+    0 1px 0 #000;
+}
+/* The pulse is a composited drop-shadow at a fixed radius, fading in and out. Animating
+   text-shadow instead re-rasterised the whole content layer (every bone SVG) each frame, which
+   made the bucket screen crawl once a few buckets were full. Buttons are left out: .plaque-press
+   uses filter for its press feedback and an animated filter would override it. */
+:root[data-theme='necro'] .glow-red:not(.plaque-press) {
+  will-change: filter;
   animation: aura 2.4s ease-in-out infinite;
 }
 @keyframes aura {
   0%,
   100% {
-    text-shadow:
-      0 0 2px var(--t-glow-hi),
-      0 0 6px var(--t-glow-core),
-      0 0 12px var(--t-glow-lo),
-      0 1px 0 #000;
+    filter: drop-shadow(0 0 10px rgb(57 255 20 / 0));
   }
   50% {
-    text-shadow:
-      0 0 3px var(--t-glow-hi),
-      0 0 12px var(--t-glow-core),
-      0 0 26px var(--t-glow-core),
-      0 1px 0 #000;
+    filter: drop-shadow(0 0 10px var(--t-glow-core));
   }
 }
 /* Motion is always on: this is a party app for a handful of friends. Spooky mode in Settings is
