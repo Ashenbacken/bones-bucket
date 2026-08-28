@@ -55,7 +55,7 @@ export function ImportDialog({ incoming, error, source, onReplace, onMerge, onCl
             </div>
           ) : (
             <p className="mt-3 text-center text-sm text-ivory-2">
-              This replaces the bucket on this phone. The other phone keeps its copy.
+              This replaces the bucket on this device. The other device keeps its copy.
             </p>
           )}
         </>

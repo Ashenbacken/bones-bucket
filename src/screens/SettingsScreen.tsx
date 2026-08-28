@@ -287,7 +287,7 @@ export function SettingsScreen() {
 
       <Section title="Hand off">
         <p className="mb-2 text-sm text-ivory-2">
-          Move the bucket to another phone. The link carries everything; both phones keep a copy.
+          Move the bucket to another device. The link carries everything; both devices keep a copy.
         </p>
         <Button
           variant="primary"
@@ -324,7 +324,7 @@ export function SettingsScreen() {
       </Section>
 
       <p className="text-center text-xs text-ivory-3">
-        Bones Bucket v{__APP_VERSION__} · data stays on this phone
+        Bones Bucket v{__APP_VERSION__} · data stays on this device
         <br />
         Gilded pixel art by{' '}
         <a
