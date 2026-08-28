@@ -326,7 +326,7 @@ export function SettingsScreen() {
       <p className="text-center text-xs text-ivory-3">
         Bones Bucket v{__APP_VERSION__} · data stays on this device
         <br />
-        Gilded pixel art by{' '}
+        Pixel theme art by{' '}
         <a
           href="https://abyssowl.itch.io/gothic-pixel-ui"
           target="_blank"
