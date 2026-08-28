@@ -44,53 +44,33 @@ themes also share component rules keyed on `html[data-kit='pixel']`); SVG
 ornaments read the same variables or switch on `themeAtom`. Adding a theme = one variable block
 plus optional ornament variants in `src/components/Ornaments.tsx`.
 
-### Adding a theme
+### Adding a theme kit
 
-Every theme id is registered in the same handful of places; TypeScript flags the ones you miss
-because they are `Record<Theme, …>` maps, and the tests iterate `THEMES` so the new id is covered
-without new test code.
+Themes can be cut from a UI asset pack. The four pixel themes are one kit (Gothic Pixel UI), one
+theme per palette; a new pack becomes a new kit the same way:
 
-1. `src/domain/types.ts` — add the id to `THEMES`. If it is drawn with the pixel kit, add it to
-   `PIXEL_THEMES` too: that makes `App.tsx` set `html[data-kit='pixel']`, which switches on the
-   shared kit component rules (frames, gauges, plaques) in `index.css`.
-2. `src/index.css` — a `:root[data-theme='<id>']` block with the `--t-*` palette (copy the closest
-   existing block). Pixel themes also set the `--g-*` slice URLs pointing at
-   `src/assets/themes/pixel/<id>/`.
-3. `src/App.tsx` — `THEME_COLOR` (browser chrome colour) and `THEME_PULSE` (the flash when a bone
-   lands).
-4. `src/screens/SettingsScreen.tsx` — `THEME_LABELS` and a `THEME_CARDS` entry, or add the id to
-   the pixel card's cycle.
-5. Pixel themes: `src/assets/themes/pixel/index.ts` — an `ASSETS` entry (frame, oval, toggle,
-   sigil, icon atlas).
-6. Optional flavour: taglines (`src/lib/taglines.ts`), bone sound (`src/lib/sound.ts`,
-   `bucketMaterial`), and theme-specific ornaments, avatars or container in
-   `src/components/{Ornaments,Avatar,BucketGraphic}.tsx`.
+1. Unpack it under `design/kits/<kit>/` next to its license file. That folder is git-ignored —
+   the raw pack stays on your machine, only the slices the app uses get committed.
+2. In Claude Code run `/create-theme-from-kit <kit> [theme-id ...]`. The skill
+   (`.claude/skills/create-theme-from-kit/SKILL.md`) reads the license, renders a contact sheet of
+   the pack, maps its parts onto the slots the app draws (screen/panel/button frames, gauge track
+   and fill, medallion, toggle, sigil, optional icon atlas), writes a `scripts/kit-<kit>.mjs`
+   slicer, registers the theme, adds `LICENSE.md` and the credits, and hands back phone-sized
+   screenshots to judge.
+3. Check the screenshots (and the app on your device), then commit.
 
-Then `npm test`, and eyeball it: `VITE_DEMO=1 npm run dev` in one shell and
-`npm run shots http://localhost:5173 <id>` in another writes phone-sized screenshots of every tab
-to `design/shots/`.
+Doing it by hand follows the same route — the skill file is the checklist. In short: a slicer
+script writes PNGs to `src/assets/themes/<kit>/<id>/`; the theme id goes into `THEMES`
+(`src/domain/types.ts`), a `:root[data-theme='<id>']` block with the `--t-*` palette and `--g-*`
+slice URLs (`src/index.css`), `THEME_COLOR`/`THEME_PULSE` (`src/App.tsx`),
+`THEME_LABELS`/`THEME_CARDS` (`src/screens/SettingsScreen.tsx`) and the kit's asset map. A kit
+with the Gothic Pixel UI geometry can join `PIXEL_THEMES` and reuse the `[data-kit='pixel']` rules;
+one with different tile sizes gets its own kit id and rule block. The `Record<Theme, …>` maps make
+TypeScript flag anything missed, and the tests iterate `THEMES`.
 
-#### Adding a new palette of the Gothic Pixel UI kit
-
-The kit's sheets stack one palette per row, so a new palette is only an offset. In
-`scripts/kit-pixel.mjs` add an entry to `PALETTES` with the per-section row offsets from the gold
-row (measure them on the sheet; `node scripts/kit-sheet.mjs <kitDir> <out.png>` renders a labelled
-contact sheet) and the checkbox origin, then run the script. It asserts the new palette's alpha
-masks match Gilded's, so a wrong offset fails loudly instead of producing shifted slices. Commit the
-generated `src/assets/themes/pixel/<id>/` folder and register the id as above.
-
-#### Bringing in a different kit
-
-1. Unpack it under `design/kits/<kit>/` next to its license — that folder is git-ignored, only
-   the slices actually used are committed.
-2. Write a `scripts/kit-<kit>.mjs` slicer (see `kit-pixel.mjs`: `sharp` crops, the 9-slice
-   `frame()` composer, alpha-mask assertions) that writes optimised PNGs to
-   `src/assets/themes/<kit>/<palette>/`, plus a `LICENSE.md` there with the pack's terms and the
-   attribution.
-3. The `data-kit='pixel'` rules and the `border-image-slice` numbers in `index.css` (28, 17, 15, 12) are the geometry of the Gothic Pixel UI tiles. A kit with different tile sizes needs its
-   own kit id (`isPixelTheme` → `is<Kit>Theme`, a second `data-kit` value in `App.tsx`) and its own
-   `[data-kit='<kit>']` rule set, rather than reusing the pixel one.
-4. Credit the artist where the pixel themes are credited: the Settings footer and this README.
+A new palette of the Gothic Pixel UI kit is only a row offset: add it to `PALETTES` in
+`scripts/kit-pixel.mjs` and run the script — it asserts the new palette's alpha masks match
+Gilded's.
 
 ## Players
 
