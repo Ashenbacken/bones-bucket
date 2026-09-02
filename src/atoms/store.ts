@@ -3,7 +3,7 @@ import { atomWithStorage, createJSONStorage } from 'jotai/utils'
 import type { Collector, DayKey, Settings, Store } from '@/domain/types'
 import { newId, STORAGE_KEY, tryParseStore } from '@/domain/store'
 import { createSeededStore } from '@/domain/seed'
-import { addBone, removeBone } from '@/domain/bones'
+import { addBone, clearDay, removeBone } from '@/domain/bones'
 import { toDayKey } from '@/domain/days'
 import { mergeStores } from '@/domain/merge'
 
@@ -89,7 +89,14 @@ export const undoLastAtom = atom(null, (get, set) => {
   set(lastTapAtom, null)
 })
 
-/** Empty the bucket: every bone ever collected is removed; collectors and settings stay. */
+/** Tip out tonight's bucket only: bones given today are removed, earlier days are kept. */
+export const clearTodayAtom = atom(null, (get, set) => {
+  const s = get(storeAtom)
+  set(storeAtom, { ...s, bones: clearDay(s.bones, get(todayAtom)) })
+  set(lastTapAtom, null)
+})
+
+/** Erase all history: every bone ever collected is removed; collectors and settings stay. */
 export const clearAllBonesAtom = atom(null, (get, set) => {
   const s = get(storeAtom)
   set(storeAtom, { ...s, bones: {} })

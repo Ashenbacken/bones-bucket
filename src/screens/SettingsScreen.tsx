@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
   clearAllBonesAtom,
+  clearTodayAtom,
   collectorsAtom,
   replaceStoreAtom,
   settingsAtom,
@@ -122,6 +123,7 @@ export function SettingsScreen() {
   const setSettings = useSetAtom(settingsAtom)
   const updateCollector = useSetAtom(updateCollectorAtom)
   const clearAllBones = useSetAtom(clearAllBonesAtom)
+  const clearToday = useSetAtom(clearTodayAtom)
   const replaceStore = useSetAtom(replaceStoreAtom)
 
   const [editing, setEditing] = useState<Collector | null>(null)
@@ -371,11 +373,19 @@ export function SettingsScreen() {
 
       <Dialog open={confirmClear} onClose={() => setConfirmClear(false)} title="Empty the bucket?">
         <p className="text-center text-sm text-ivory-2">
-          Removes every bone ever collected, on every day. Collectors and settings stay.
+          Tip out only tonight's bones, or erase every bone ever collected on every day. Collectors
+          and settings stay either way.
         </p>
-        <div className="mt-4 flex gap-2">
-          <Button variant="ghost" onClick={() => setConfirmClear(false)} className="flex-1">
-            Keep them
+        <div className="mt-4 flex flex-col gap-2">
+          <Button
+            variant="danger"
+            onClick={() => {
+              clearToday()
+              setConfirmClear(false)
+            }}
+            className="w-full"
+          >
+            Tonight only
           </Button>
           <Button
             variant="danger"
@@ -383,9 +393,12 @@ export function SettingsScreen() {
               clearAllBones()
               setConfirmClear(false)
             }}
-            className="flex-1"
+            className="w-full"
           >
-            Empty it
+            All history
+          </Button>
+          <Button variant="ghost" onClick={() => setConfirmClear(false)} className="w-full">
+            Keep them
           </Button>
         </div>
       </Dialog>
